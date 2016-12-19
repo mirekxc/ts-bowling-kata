@@ -1,23 +1,24 @@
 {
-  "name": "TSBowlingKata",
+  "name": "ts-bowling-kata",
   "version": "1.0.0",
   "description": "",
-  "main": "web/index.html",
+  "private": true,
+  "license": "MIT",
   "scripts": {
     "test": "karma start karma.config.js"
   },
-  "author": "Da Vinci Studio",
-  "license": "ISC",
+  "dependencies": {
+    "@types/jasmine": "^2.5.35",
+    "jasmine-core": "^2.4.1",
+    "karma": "^1.2.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-cli": "^1.0.1",
+    "karma-jasmine": "^1.0.2",
+    "typescript": "latest"
+  },
   "devDependencies": {
-    "exec-file-sync": "^2.0.2",
-    "jasmine": "^2.5.2",
-    "karma": "^1.3.0",
-    "karma-jasmine": "^1.1.0",
     "karma-mocha-reporter": "^2.2.1",
     "karma-phantomjs-launcher": "^1.0.2",
-    "karma-typescript": "^2.1.4",
-    "karma-typescript-preprocessor": "^0.3.0",
-    "typescript": "1.8.10"
-  },
-  "dependencies": {}
+    "karma-typescript": "^2.1.5"
+  }
 }
