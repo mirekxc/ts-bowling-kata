@@ -39,6 +39,16 @@ describe("BowlingGame", () => {
         expect(game.score()).toBe(300);
     });
 
+    it ('handle turkey\'s pinfall', () => {
+        game.roll(10);
+        game.roll(10);
+        game.roll(10);
+        game.roll(0);
+        game.roll(9);
+        repeatRoll(14, 0);
+        expect(game.score()).toBe(78);
+    });
+
     function rollStrike() {
         game.roll(10);
     }
