@@ -1,50 +1,54 @@
 export class BowlingGame {
-    private rolls: Array<number> = [];
-    private currentRoll = 0;
+  private rolls: Array<number> = [];
 
-    public roll(pins: number) {
-        this.rolls[this.currentRoll++] = pins;
+  public roll(pins: number): void {
+    this.rolls.push(pins);
+  }
+
+  public score(): number {
+    let score: number = 0;
+    let throwIndex: number = 0;
+
+    for (let frame = 0; frame < 10; frame++) {
+      if (this.isStrike(throwIndex)) {
+        score += 10 + this.strikeBonus(throwIndex);
+        throwIndex++;
+
+        continue;
+      }
+
+      if (this.isSpare(throwIndex)) {
+        score += 10 + this.spareBonus(throwIndex);
+        throwIndex += 2;
+
+        continue;
+      }
+
+      score += this.sumPointsFromFrame(throwIndex);
+      throwIndex += 2;
     }
 
-    public score(): number {
-        let score: number = 0;
-        let frameIndex: number = 0;
+    return score;
+  }
 
-        for (let frame: number = 0; frame < 10; frame++) {
-            if (this.isStrike(frameIndex)) {
-                score += 10 + this.strikeBonus(frameIndex);
-                frameIndex++;
-            }
-            else if (this.isSpare(frameIndex)) {
-                score += 10 + this.spareBonus(frameIndex);
-                frameIndex += 2;
-            } else {
-                score += this.sumOfBallsInFrame(frameIndex);
-                frameIndex += 2;
-            }
-        }
+  private strikeBonus(throwIndex: number): number {
+    return this.rolls[throwIndex+1] + this.rolls[throwIndex+2];
+  }
 
-        return score;
-    }
+  private spareBonus(throwIndex: number): number {
+    return this.rolls[throwIndex+2];
+  }
 
-    private strikeBonus(frameIndex: number): number {
-        return this.rolls[frameIndex + 1] + this.rolls[frameIndex + 2];
-    }
+  private sumPointsFromFrame(throwIndex: number): number {
+    return this.rolls[throwIndex] + this.rolls[throwIndex+1];
+  }
 
-    private spareBonus(frameIndex: number): number {
-        return this.rolls[frameIndex + 2];
-    }
+  private isStrike(throwIndex: number): boolean {
+    return this.rolls[throwIndex] === 10;
+  }
 
-    private sumOfBallsInFrame(frameIndex: number): number {
-        return this.rolls[frameIndex] + this.rolls[frameIndex+1];
-    }
-
-    private isSpare(frameIndex: number): boolean {
-        return this.rolls[frameIndex] + this.rolls[frameIndex + 1] === 10;
-    }
-
-    private isStrike(frameIndex: number): boolean {
-        return this.rolls[frameIndex] === 10;
-    }
+  private isSpare(throwIndex: number): boolean {
+    return this.rolls[throwIndex] + this.rolls[throwIndex+1] === 10;
+  }
 
 }
