@@ -1,4 +1,7 @@
+import { Frame } from './Frame';
+
 export class BowlingGame {
+  public static FRAMES_COUNT: number = 10;
   private rolls: Array<number> = [];
 
   public roll(pins: number): void {
@@ -7,48 +10,44 @@ export class BowlingGame {
 
   public score(): number {
     let score: number = 0;
-    let throwIndex: number = 0;
+    let frames: Array<Frame> = this.getFrames();
 
-    for (let frame = 0; frame < 10; frame++) {
-      if (this.isStrike(throwIndex)) {
-        score += 10 + this.strikeBonus(throwIndex);
-        throwIndex++;
-
-        continue;
-      }
-
-      if (this.isSpare(throwIndex)) {
-        score += 10 + this.spareBonus(throwIndex);
-        throwIndex += 2;
-
-        continue;
-      }
-
-      score += this.sumPointsFromFrame(throwIndex);
-      throwIndex += 2;
+    if (frames.length < BowlingGame.FRAMES_COUNT) {
+      throw new Error('Game is not finished!');
     }
 
-    return score;
+    return frames
+      .map(frame => frame.getFrameScore())
+      .reduce((prev: number, current: number) => prev + current);
   }
 
-  private strikeBonus(throwIndex: number): number {
-    return this.rolls[throwIndex+1] + this.rolls[throwIndex+2];
+  private getFrames(): Array<Frame> {
+    let frames: Array<Frame> = [];
+
+    for (let rollIndex = 0; rollIndex < this.rolls.length; rollIndex++) {
+      let frame: Frame;
+
+      if (this.rolls[rollIndex] === Frame.MAX_SCORE) {
+        frame = new Frame(Frame.MAX_SCORE);
+      } else {
+        frame = new Frame(this.rolls[rollIndex], this.rolls[rollIndex + 1]);
+        rollIndex++;
+      }
+
+      this.addBonusRolls(frame, rollIndex + 1);
+      frames.push(frame);
+
+      if (frames.length === BowlingGame.FRAMES_COUNT || !frame.isFinished()) {
+        break;
+      }
+    }
+
+    return frames;
   }
 
-  private spareBonus(throwIndex: number): number {
-    return this.rolls[throwIndex+2];
-  }
-
-  private sumPointsFromFrame(throwIndex: number): number {
-    return this.rolls[throwIndex] + this.rolls[throwIndex+1];
-  }
-
-  private isStrike(throwIndex: number): boolean {
-    return this.rolls[throwIndex] === 10;
-  }
-
-  private isSpare(throwIndex: number): boolean {
-    return this.rolls[throwIndex] + this.rolls[throwIndex+1] === 10;
+  private addBonusRolls(frame: Frame, rollndex: number): void {
+    let bonusRollsCount: number = frame.getBonusRollsCount();
+    frame.setBonusRolls(this.rolls.slice(rollndex, rollndex + bonusRollsCount));
   }
 
 }

@@ -44,6 +44,42 @@ describe("BowlingGame", () => {
     expect(game.score()).toBe(300);
   });
 
+  it ('should sum results from game with only spare throws', () => {
+    game.roll(0);
+    game.roll(10);
+
+    game.roll(1);
+    game.roll(9);
+
+    game.roll(2);
+    game.roll(8);
+
+    game.roll(3);
+    game.roll(7);
+
+    game.roll(4);
+    game.roll(6);
+
+    game.roll(5);
+    game.roll(5);
+
+    game.roll(6);
+    game.roll(4);
+
+    game.roll(7);
+    game.roll(3);
+
+    game.roll(8);
+    game.roll(2);
+
+    game.roll(9);
+    game.roll(1);
+
+    game.roll(5);
+
+    expect(game.score()).toBe(150);
+  });
+
   it ('should sum results random points and random bonuses', () => {
     game.roll(10);
     game.roll(9);
@@ -66,10 +102,11 @@ describe("BowlingGame", () => {
     expect(game.score()).toBe(187);
   });
 
-  xit ('should handle strike throw after null throw', () => {
+  it ('should handle strike throw after null throw', () => {
     game.roll(0);
     game.roll(10);
     game.roll(5);
+    repeatThrows(17, 0);
 
     expect(game.score()).toBe(20);
   });
